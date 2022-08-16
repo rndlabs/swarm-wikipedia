@@ -31,10 +31,13 @@
           event.preventDefault();
           // @ts-ignore
           const href = event.currentTarget.getAttribute('href');
-          const target_id = String(href).substring(1);
-          const target = document.getElementById(target_id);
-          target.scrollIntoView();
-
+          if(String(href).startsWith('#')){
+            const target_id = String(href).substring(1);
+            const target = document.getElementById(target_id);
+            target.scrollIntoView();
+          }else{
+            console.log('Unhandled external link');
+          }
           return false;
         })
       }
