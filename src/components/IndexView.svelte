@@ -1,3 +1,15 @@
+<svelte:head>  
+  <link rel="canonical" href="https://en.wikipedia.org/wiki/Australia">
+  <link href="../-/mw/ext.cite.ux-enhancements.css" rel="stylesheet" type="text/css">
+  <link href="../-/mw/ext.tmh.player.css" rel="stylesheet" type="text/css">
+  <link href="../-/mw/ext.scribunto.logs.css" rel="stylesheet" type="text/css">
+  <link href="../-/mw/ext.cite.styles.css" rel="stylesheet" type="text/css">
+  <link href="../-/mw/ext.tmh.player.styles.css" rel="stylesheet" type="text/css">
+  <link href="../-/mw/skins.minerva.base.reset|skins.minerva.content.styles|ext.cite.style|site.styles|mobile.app.pagestyles.android|mediawiki.page.gallery.styles|mediawiki.skinning.content.parsoid.css" rel="stylesheet" type="text/css">
+  <link href="../-/style.css" rel="stylesheet" type="text/css"><link href="../-/content.parsoid.css" rel="stylesheet" type="text/css"><link href="../-/inserted_style.css" rel="stylesheet" type="text/css">
+  <script src="../-/script.js"></script><script src="../-/masonry.min.js"></script><script src="../-/article_list_home.js"></script><script src="../-/images_loaded.min.js"></script><script src="../-/node_module/details-element-polyfill/dist/details-element-polyfill.js"></script>
+</svelte:head>
+
 <script>
     import axios from 'axios'
 
