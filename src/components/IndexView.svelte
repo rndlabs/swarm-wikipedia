@@ -13,18 +13,46 @@
 
 <script>
     import axios from 'axios'
+    import { onMount } from 'svelte';
     import pako from 'pako'
 
-    let currentURI = 'http://58.96.39.160:1633/bzz/886edc68280664dd077acbd4a0ec1bae30669cb842181b3907ab81797ebc9323/wiki/Australia'
+    let currentURI = ''
+    let isLoading = true;
+    const BASE_URI = 'http://58.96.39.160:1633/bzz/886edc68280664dd077acbd4a0ec1bae30669cb842181b3907ab81797ebc9323/'
+    onMount(() => {
+      const pathname = window.location.pathname
+      if(pathname === '/wiki/index'){
+        currentURI = BASE_URI + '/wiki/index'
+      }else if(pathname.startsWith('/wiki')){
+        currentURI = BASE_URI + pathname 
+      } else {
+        currentURI = BASE_URI + '/wiki/index'
+      }
 
+      initialize()
+    });
     async function initialize() {
-        let req = await axios.get(currentURI, { responseType: "arraybuffer"});
-        let uint8 = new Uint8Array(req.data);
-        let uint8_inflated = pako.inflate(uint8);
-        let markdown = decode_utf8(uint8_inflated)
-        document.getElementById('page-content').innerHTML = markdown
-        findAnchors();
-        fixImages();
+        isLoading = true;
+        if(currentURI.length < 1){
+          isLoading = false;
+          return;
+        }
+        try{
+          let req = await axios.get(currentURI, { responseType: "arraybuffer"});
+          let uint8 = new Uint8Array(req.data);
+          let uint8_inflated = pako.inflate(uint8);
+          let markdown = decode_utf8(uint8_inflated)
+          document.getElementById('page-content').innerHTML = markdown
+          isLoading = false;
+          findAnchors();
+          fixImages();
+        }catch(e){
+          if(e.request.status === 404){
+            // @ts-ignore
+            window.location = '/wiki/index'
+          }
+        }
+        
     // toggleDarkmode();
     }
 
@@ -63,24 +91,11 @@
       var result = new TextDecoder().decode(uint8);
       return result
     }
-    initialize();
+    // initialize();
 
     function findAnchors(){
       let anchors = document.getElementsByTagName('a');
 
-      for(let i = 0; i < anchors.length; i++){
-          const href_attribute = anchors[i].attributes.getNamedItem('href')
-          try{
-            const old_value = href_attribute.value
-            if(!String(old_value).startsWith('http') && !String(old_value).startsWith('#')){
-              let new_href = document.createAttribute('href')
-              new_href.value = 'http://58.96.39.160:1633/bzz/886edc68280664dd077acbd4a0ec1bae30669cb842181b3907ab81797ebc9323/wiki/' + old_value
-              anchors[i].attributes.setNamedItem(new_href)
-            }
-          }catch(e){
-            console.log(e)
-          }
-      }
       for(let i = 0; i < anchors.length; i++){
         anchors[i].addEventListener('click', (event) => {
           event.preventDefault();
@@ -91,8 +106,7 @@
             const target = document.getElementById(target_id);
             target.scrollIntoView();
           }else{
-            currentURI = href
-            alert('load new page')
+            currentURI = 'http://58.96.39.160:1633/bzz/886edc68280664dd077acbd4a0ec1bae30669cb842181b3907ab81797ebc9323/wiki/' + href
             initialize();
           }
           return false;
@@ -110,8 +124,8 @@
     <div class='fixed-menu-line'></div>
     <div class='fixed-menu-line'></div>
   </div>
+  <div class={isLoading ? 'loader' : 'loader-hidden'}><div class="spinner"></div></div>
   <div class='page-content' id='page-content'></div>
-
 </main>
   
   <style>
