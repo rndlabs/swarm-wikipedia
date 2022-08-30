@@ -19,12 +19,10 @@
 
     async function initialize() {
         let req = await axios.get(currentURI, { responseType: "arraybuffer"});
-        stage = 1;
         let uint8 = new Uint8Array(req.data);
         let uint8_inflated = pako.inflate(uint8);
         let markdown = decode_utf8(uint8_inflated)
         document.getElementById('page-content').innerHTML = markdown
-        stage = 2 
         findAnchors();
         fixImages();
     // toggleDarkmode();
