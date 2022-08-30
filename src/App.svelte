@@ -6,7 +6,6 @@
 
 <main>
   <div class='container'>
-    <div class='header'>Swarm Lookup</div>  
     <Router {routes} />
   </div>
 </main>
@@ -15,9 +14,6 @@
   .container{
     width: 100%;
     min-height: 100vh;
-
-  }
-  .header{
-    font-size: 21px;
+    padding-top: 48px;
   }
 </style>

@@ -8,19 +8,17 @@
   <link href="../-/mw/skins.minerva.base.reset|skins.minerva.content.styles|ext.cite.style|site.styles|mobile.app.pagestyles.android|mediawiki.page.gallery.styles|mediawiki.skinning.content.parsoid.css" rel="stylesheet" type="text/css">
   <link href="../-/style.css" rel="stylesheet" type="text/css"><link href="../-/content.parsoid.css" rel="stylesheet" type="text/css"><link href="../-/inserted_style.css" rel="stylesheet" type="text/css">
   <script src="../-/script.js"></script><script src="../-/masonry.min.js"></script><script src="../-/article_list_home.js"></script><script src="../-/images_loaded.min.js"></script><script src="../-/node_module/details-element-polyfill/dist/details-element-polyfill.js"></script>
+
 </svelte:head>
 
 <script>
     import axios from 'axios'
-
     import pako from 'pako'
-    export let currentRoute
-    let stage = 0;
 
+    let currentURI = 'http://58.96.39.160:1633/bzz/886edc68280664dd077acbd4a0ec1bae30669cb842181b3907ab81797ebc9323/wiki/Australia'
 
     async function initialize() {
-
-        let req = await axios.get('http://58.96.39.160:1633/bzz/94cfa31d8ba3f244ebbb95ac7f2fe57651563fe81e578dca0b0fc440d4827fef/', { responseType: "arraybuffer"});
+        let req = await axios.get(currentURI, { responseType: "arraybuffer"});
         stage = 1;
         let uint8 = new Uint8Array(req.data);
         let uint8_inflated = pako.inflate(uint8);
@@ -28,6 +26,39 @@
         document.getElementById('page-content').innerHTML = markdown
         stage = 2 
         findAnchors();
+        fixImages();
+    // toggleDarkmode();
+    }
+
+    function fixImages(){
+      let imgs = document.getElementsByTagName('img');
+      for(let i = 0; i < imgs.length; i++){
+        let newURL = document.createAttribute('src')
+        newURL.value = 'http://58.96.39.160:1633/bzz/886edc68280664dd077acbd4a0ec1bae30669cb842181b3907ab81797ebc9323/' + imgs[i].attributes.getNamedItem('src').value
+        imgs[i].attributes.setNamedItem(newURL)
+      }
+    }
+
+    
+
+    function toggleDarkmode(){
+      let q = document.querySelectorAll('div')
+
+      for(let i = 0; i < q.length; i++){
+        q[i].style.backgroundColor = '#333'
+        q[i].style.color = 'white'
+      }
+
+      let a = document.querySelectorAll('a')
+      for(let x = 0; x < a.length; x++){
+        a[x].style.color = '#5fffe1'
+      }
+
+      let tables = document.querySelectorAll('table')
+      for(let i = 0; i < tables.length; i++){
+        tables[i].style.backgroundColor = '#333';
+      }
+
     }
 
     function decode_utf8(uint8) {
@@ -38,6 +69,20 @@
 
     function findAnchors(){
       let anchors = document.getElementsByTagName('a');
+
+      for(let i = 0; i < anchors.length; i++){
+          const href_attribute = anchors[i].attributes.getNamedItem('href')
+          try{
+            const old_value = href_attribute.value
+            if(!String(old_value).startsWith('http') && !String(old_value).startsWith('#')){
+              let new_href = document.createAttribute('href')
+              new_href.value = 'http://58.96.39.160:1633/bzz/886edc68280664dd077acbd4a0ec1bae30669cb842181b3907ab81797ebc9323/wiki/' + old_value
+              anchors[i].attributes.setNamedItem(new_href)
+            }
+          }catch(e){
+            console.log(e)
+          }
+      }
       for(let i = 0; i < anchors.length; i++){
         anchors[i].addEventListener('click', (event) => {
           event.preventDefault();
@@ -48,22 +93,26 @@
             const target = document.getElementById(target_id);
             target.scrollIntoView();
           }else{
-            console.log('Unhandled external link');
+            currentURI = href
+            alert('load new page')
+            initialize();
           }
           return false;
         })
       }
     }
 
+
   </script>
 
 
 
 <main>
-
-      <div class='id'>{ stage === 0 ? 'Loading' : ''} { stage === 1 ? 'Finished loading, decompressing' : ''} </div>
-
-      <div class='page-content' id='page-content'></div>
+  <div class='fixed-menu'>
+    <div class='fixed-menu-line'></div>
+    <div class='fixed-menu-line'></div>
+  </div>
+  <div class='page-content' id='page-content'></div>
 
 </main>
   
@@ -74,5 +123,31 @@
       min-height: 100vh;
       background-color: white;
     }
+
+    .fixed-menu-line{
+      height: 3px;
+      width: 60%;
+      background: white;
+    }
+    .fixed-menu{
+      width: 36px;
+      height: 36px;
+      border-radius: 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      align-items: center;
+      justify-content: center;
+      position: fixed;
+      top: 0;
+      right: 0;
+      background-color: black;
+      z-index: 10;
+      margin: 12px;
+    }
+
+    
+
+
   </style>
   
