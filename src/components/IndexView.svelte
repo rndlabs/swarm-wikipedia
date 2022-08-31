@@ -145,10 +145,6 @@
 </script>
 
 <main>
-  <div class='fixed-menu'>
-    <div class='fixed-menu-line'></div>
-    <div class='fixed-menu-line'></div>
-  </div>
   <div class={isLoading ? 'loader' : 'loader-hidden'}><div class="spinner"></div></div>
   <div class='page-content' id='page-content'></div>
 </main>
@@ -158,28 +154,6 @@
       width: 100%;
       min-height: 100vh;
       background-color: white;
-    }
-
-    .fixed-menu-line{
-      height: 3px;
-      width: 60%;
-      background: white;
-    }
-    .fixed-menu{
-      width: 36px;
-      height: 36px;
-      border-radius: 36px;
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      align-items: center;
-      justify-content: center;
-      position: fixed;
-      top: 0;
-      right: 0;
-      background-color: black;
-      z-index: 10;
-      margin: 12px;
     }
 </style>
   
