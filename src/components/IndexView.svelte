@@ -58,7 +58,7 @@
             initialize();
         } else {
             // if no article is set, set the currentURI to BASE_URI + /wiki/Home
-            push('/en/wiki/Index');
+            push('/en/wiki/index');
         }
     });
 
@@ -80,7 +80,7 @@
         }catch(e){
           if(e.request.status === 404){
             // @ts-ignore
-            push('/en/wiki/Index');
+            push('/en/wiki/index');
           }
         }
         
