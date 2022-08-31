@@ -1,6 +1,8 @@
 <script>
-  import { Router } from 'svelte-router-spa'
-  import { routes } from './routes.js'
+  import Router from 'svelte-spa-router'
+  import { routes } from './routes'
+  import IndexView from './components/IndexView.svelte'
+
   const params = {}
 </script>
 
