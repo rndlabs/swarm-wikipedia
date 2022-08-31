@@ -1,12 +1,13 @@
 <script>
-  import { Router } from 'svelte-router-spa'
-  import { routes } from './routes.js'
+  import Router from 'svelte-spa-router'
+  import { routes } from './routes'
+  import IndexView from './components/IndexView.svelte'
+
   const params = {}
 </script>
 
 <main>
   <div class='container'>
-    <div class='header'>Swarm Lookup</div>  
     <Router {routes} />
   </div>
 </main>
@@ -15,9 +16,6 @@
   .container{
     width: 100%;
     min-height: 100vh;
-
-  }
-  .header{
-    font-size: 21px;
+    padding-top: 48px;
   }
 </style>

@@ -1,26 +1,38 @@
 {
-  "name": "my-app",
+  "name": "rndlabs-wikipedia",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "start": "sirv public -s",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "check": "svelte-check --tsconfig ./tsconfig.json",
+    "fix": "npx eslint --fix \"{,!(node_modules|public)/**/}*.{js,svelte}\"",
+    "format": "npx prettier --write \"{,!(node_modules|public)/**/}*.{js,svelte}\""
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^1.0.1",
+    "@tsconfig/svelte": "^3.0.0",
+    "eslint": "^8.23.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-svelte3": "^4.0.0",
+    "prettier": "^2.7.1",
+    "prettier-plugin-svelte": "^2.7.0",
     "svelte": "^3.49.0",
+    "svelte-check": "^2.8.0",
+    "svelte-preprocess": "^4.10.7",
+    "svelte-spa-history-router": "^2.1.0",
+    "tslib": "^2.4.0",
+    "typescript": "^4.6.4",
     "vite": "^3.0.7"
   },
   "dependencies": {
+    "@types/axios": "^0.14.0",
+    "@types/pako": "^2.0.0",
     "axios": "^0.27.2",
-    "decompress-response": "^8.0.0",
     "pako": "^2.0.4",
-    "react-zlib-js": "^1.0.5",
-    "svelte-router-spa": "^6.0.3",
-    "svelte-routing": "^1.6.0",
+    "svelte-spa-router": "^3.3.0",
     "zlib": "^1.0.5"
   }
 }
