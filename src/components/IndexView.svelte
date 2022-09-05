@@ -42,7 +42,7 @@
             let articleName = window.location.hash.substring(window.location.hash.lastIndexOf('/') + 1);
             // console.log('article name', articleName);
             // set the currentURI
-            currentURI = BASE_URI + 'wiki/'+ articleName;
+            currentURI = BASE_URI + 'wiki/'+ encodeURIComponent(articleName);
             // console.log('currentURI', currentURI);
             initialize();
         }
@@ -54,7 +54,7 @@
         // console.log(currentRoute.childRoute.namedParams);
         // if params is set and the article is set, set the currentURI to BASE_URI + /wiki/ + article
         if (params && params.article) {
-            currentURI = BASE_URI + 'wiki/' + params.article;
+            currentURI = BASE_URI + 'wiki/' + encodeURIComponent(params.article);
             initialize();
         } else {
             // if no article is set, set the currentURI to BASE_URI + /wiki/Home
@@ -97,6 +97,16 @@
       for(let i = 0; i < imgs.length; i++){
         let newURL = document.createAttribute('src')
         newURL.value = BASE_URI + imgs[i].attributes.getNamedItem('src').value
+
+        // do a patch for a double-encoded media file name
+        // get the file name from newURL
+        let fileName = newURL.value.substring(newURL.value.lastIndexOf('/') + 1);
+        // url encode the file name
+        fileName = encodeURIComponent(fileName);
+        // replace the file name in the newURL
+        newURL.value = newURL.value.replace(newURL.value.substring(newURL.value.lastIndexOf('/') + 1), fileName);
+        // replace any instances of 2525 in the newURL with 25
+        newURL.value = newURL.value.replace(/2525/g, '25');
         imgs[i].attributes.setNamedItem(newURL)
       }
     }
